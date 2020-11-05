@@ -1,31 +1,29 @@
 <?php
+class dbase{
+    function connectDB(){
 
-function connectDB(){
-
-    $server = "localhost";
-    $user = "root";
-    $pass = "";
-    $bd = "idiomas";
-
-
-    $conexion = mysqli_connect($server, $user, $pass,$bd);
-    if (!$conexion) {
-        die("Connection failed: ".mysqli_connect_error());
+        $server = "localhost";
+        $user = "root";
+        $pass = "";
+        $bd = "idiomas";
+    
+    
+        $conexion = mysqli_connect($server, $user, $pass,$bd) 
+            or die("Ha sucedido un error inexperado en la conexion de la base de datos");
+    
+        return $conexion;
+    } 
+    
+    function disconnectDB($conexion){
+    
+        $close = mysqli_close($conexion) 
+            or die("Ha sucedido un error inexperado en la desconexion de la base de datos");
+    
+        return $close;
     }
-    echo "Connected successfully";
-    mysqli_close($conexion);
-} 
+    //connectDB();
+    
 
-?>
-
-<?php
-
-function disconnectDB($conexion){
-
-    $close = mysqli_close($conexion) 
-        or die("Ha sucedido un error inexperado en la desconexion de la base de datos");
-
-    return $close;
 }
 
 ?>
