@@ -1,0 +1,49 @@
+<?php
+
+//Creamos la conexión con la función de conectar y le damos formato de datos utf8
+$conexion = connectDB();
+mysqli_set_charset($conexion, "utf8");
+
+
+//Generamos la consulta
+$sql = "SELECT * FROM tabla";
+if(!$result = mysqli_query($conexion, $sql)) die();
+
+//
+// Reccoremos los campos necesarios por ejemplo con:
+
+
+// Para filas de resultados como un array:
+while($row = mysqli_fetch_array($result)){
+...
+}
+
+
+// Para filas de resultados como arrays asociativos (keys):
+while($row = mysqli_fetch_assoc($result)){
+...
+}
+
+
+// Para filas de resultados como arrays enumerados (indices):
+while($row = mysqli_fetch_row($result)){
+...
+}	
+
+
+// Para la fila actual de un conjunto de resultados como un objeto:
+while($row= mysqli_fetch_object($result)){
+...
+}
+
+
+
+//
+
+
+
+//desconectamos la base de datos
+disconnectDB($conexion);
+
+
+?>
