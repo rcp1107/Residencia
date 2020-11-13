@@ -17,6 +17,10 @@ switch($_REQUEST["rutina"]){
         $dato=$_REQUEST['estado'];
         print $Eng->docentes($dato);
         break;
+    case 'alumnos':
+        $dato=$_REQUEST['estado'];
+        print $Eng->alumnos($dato);
+        break;
 
 }
 ?>

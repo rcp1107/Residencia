@@ -6,8 +6,9 @@
     </head>
     <body>                        
         <h1>COORDINACION</h1>
-        <p>
-            Acceso como COORDINACION
-        </p>
+
+
+        
     </body>    
 </html>
+

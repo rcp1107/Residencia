@@ -1,6 +1,30 @@
 
 <?php
 class Idiomas{
+   public function menu(){
+  
+    $html='
+    <div class="row">
+      <div class="col-3">
+      <ul class="list-group">
+        <li class="list-group-item active">Alumno</li>
+        <li class="list-group-item">Calificaciones</li>
+        <li class="list-group-item">Grupo</li>
+        <li class="list-group-item">Aviso</li>
+        <li class="list-group-item">Tools</li>
+      </ul>
+      
+      </div>
+      <div class="col-9"></div>
+    
+    </div>
+
+
+';
+
+return $html;
+   }
+
     public function coordinacion($id){
      $html='
      <div class="tab-pane fade show active" id="coordinacion" role="tabpanel"aria-labelledby="coordinacion-tab">
@@ -48,7 +72,29 @@ class Idiomas{
     }
   
 
+public function docentes($request){
+   
+  $html='
+      <div class="row">
+        <div class="col-3">
+        <ul class="list-group">
+          <li class="list-group-item active">Alumno</li>
+          <li class="list-group-item">Calificaciones</li>
+          <li class="list-group-item">Grupo</li>
+          <li class="list-group-item">Aviso</li>
+          <li class="list-group-item">Tools</li>
+        </ul>
+        
+        </div>
+        <div class="col-9"></div>
+      
+      </div>
+  
+  
+  ';
 
+  return $html;
+}
 
 
 

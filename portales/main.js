@@ -26,7 +26,7 @@ var s="prueba";
     });
 
 }
-function Coordinacion(){
+function coordinacion(){
 
     var s="prueba";
         console.log("estoy en coordinacion");
@@ -43,7 +43,7 @@ function Coordinacion(){
         })
     
         .done(function(data){
-            $("#ventana").html(data);
+            $("#coordinacion").html(data);
             
             console.log(data);
         })
@@ -52,3 +52,55 @@ function Coordinacion(){
         });
     
     }
+    function docentes(){
+
+        var s="prueba";
+        console.log("estoy en docentes");
+        var params={
+            rutina:'docentes',
+            estado:s
+        }
+    
+        $.ajax({
+            url:"portales/rutinas.php",
+            data:params,
+            type:"POST",
+            dataType:"text"
+        })
+    
+        .done(function(data){
+            $("#inicio").addClass("hidden");
+    
+            console.log(data);
+        })
+        .fail(function(textStatus){
+           alert("error de ajax");
+        });
+
+    }
+        function alumnos(){
+
+            var s="prueba";
+                console.log("estoy en Docentes");
+                var params={
+                    rutina:'alumnos',
+                    estado:s
+                }
+            
+                $.ajax({
+                    url:"portales/rutinas.php",
+                    data:params,
+                    type:"POST",
+                    dataType:"text"
+                })
+            
+                .done(function(data){
+                    $("#ventana").html(data);
+                    
+                    console.log(data);
+                })
+                .fail(function(textStatus){
+                   alert("error de ajax");
+                });
+            
+            }

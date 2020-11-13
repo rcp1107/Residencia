@@ -20,7 +20,7 @@
   
       <ul class="nav ">
          <li class="nav-item">
-           <a class="nav-link active" href="#inicio" onclick="menu()">Inicio</i></a>
+           <a class="nav-link active" href="#inicio" >Inicio</i></a>
          </li>
          <li class="nav-item" data-toggle="modal" data-target="#Modal">
            <a class="nav-link" href="#coordinacion" >Coordinación </li></a>
@@ -78,14 +78,24 @@
                        <!-- Tabs Titles -->
                        <div class="login">
                         <h2 class= "loginin">Login </h2>
-                    <form action="login.php" method="post">
+                 <!--   <form action="login.php" method="post">
                         <label class=" loginin"> Usuario:</label>
                         <input class="form-control loginin" name="username" type="text" id="username" required>
                         <label class="loginin">Password:</label>
                         <input class="form-control loginin" name="password" type="password" id="password" required>
                         <input class="btn btn-autline-warning log" type="submit" name="submit" value="Login">
-                               
-                    </form>
+                       
+                    </form>-->
+                    <form >
+                      <label class=" loginin"> Usuario:</label>
+                      <input class="form-control loginin" name="username" type="text" id="username" required>
+                      <label class="loginin">Password:</label>
+                      <input class="form-control loginin" name="password" type="password" id="password" required>
+                     <button class="btn btn-autline-default" onclick="menu()">Inicio</button>
+                             
+                  </form>
+
+
                     </div>
                    
                      </div>
