@@ -11,8 +11,8 @@
 <script src="librerias/bootstrap/js/bootstrap.min.js"></script>
 
 <script src="librerias/jQuery/dist/jquery.mask.min.js"></script>
-<link rel="stylesheet" href="./fontawesome/css/all.min.css">
-<script type="text/javascript" src="./portales/main.js"></script>
+<link rel="stylesheet" href="fontawesome/css/all.min.css">
+<script type="text/javascript" src="portales/main.js"></script>
 
 
 <!------ Include the above in your HEAD tag ---------->
@@ -22,14 +22,11 @@
          <li class="nav-item">
            <a class="nav-link active" href="#inicio" >Inicio</i></a>
          </li>
-         <li class="nav-item" data-toggle="modal" data-target="#Modal">
-           <a class="nav-link" href="#coordinacion" >Coordinación </li></a>
+          <a class="nav-link" href="#coordinacion" >Coordinación </a>
          </li>
-         <li class="nav-item" data-toggle="modal" data-target="#Modal">
-           <a class="nav-link" href="#docentes">Docentes</li></a>
+          <a class="nav-link" href="#docentes">Docentes</a>
          </li>
-         <li class="nav-item" data-toggle="modal" data-target="#Modal">
-            <a class="nav-link" href="#alumnos">Alumnos</li></a>
+          <a class="nav-link" href="#alumnos">Alumnos</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Quejas/Sugerencias</a>
@@ -98,6 +95,7 @@
           </div>
 
       </div>
+
 
 </form>
 

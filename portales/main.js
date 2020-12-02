@@ -34,7 +34,6 @@ function coordinacion(){
             rutina:'coordinacion',
             estado:s
         }
-    
         $.ajax({
             url:"portales/rutinas.php",
             data:params,
