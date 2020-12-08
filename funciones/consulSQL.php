@@ -30,6 +30,7 @@ class consultasSQL{
             die("Ha ocurrido un error al insertar los datos en la tabla $tabla");
         }
         return $consul;
+
     }
     public static function DeleteSQL($tabla, $condicion) {
         if (!$consul = ejecutarSQL::consultar("delete from $tabla where $condicion")) {

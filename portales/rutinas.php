@@ -5,9 +5,9 @@ $Eng= new Idiomas();
 
 
 switch($_REQUEST["rutina"]){
-    case 'menu':
+    case 'inicio':
         $dato=$_REQUEST['estado'];
-        print $Eng->menu($dato);
+        print $Eng->inicio($dato);
         break;
     case 'coordinacion':
         $dato=$_REQUEST['estado'];
@@ -20,6 +20,13 @@ switch($_REQUEST["rutina"]){
     case 'alumnos':
         $dato=$_REQUEST['estado'];
         print $Eng->alumnos($dato);
+        break;
+    case 'login':
+        print $Eng->login($_REQUEST);
+        break;
+    case 'listCoordinacion':
+        $s=$_REQUEST['estado'];
+       // print $Eng->pantallaCoordinacion(s);
         break;
 
 }
