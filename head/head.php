@@ -10,9 +10,6 @@
     <script src="./portales/main.js" type="text/javascript"></script>
 
 
-
-
-
     <link href="./librerias/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="./librerias/bootstrap/js/bootstrap.min.js"></script>
     <!--<script src="./librerias/jQuery/dist/jquery.mask.min.js"></script>-->
@@ -22,12 +19,12 @@
 <h4>
     <ul class="nav ">
         <li class="nav-item">
-            <a class="nav-link active" onclick="carrucel()" >Inicio</i></a>
+            <a class="nav-link active" onclick="carrucel()">Inicio</i></a>
         </li>
         <!--<a href="#" class="nav-link" data-toggle="modal" data-target=".modal-login">
             <i class="fa fa-user"></i>&nbsp;&nbsp;Coordinación
         </a>-->
-        <a class="nav-link" onclick="pintaCoordinacion()" >Coordinacion</i></a>
+        <a class="nav-link" onclick="pintaCoordinacion()">Coordinacion</i></a>
 
         </li>
         <a class="nav-link" href="#docentes">Docentes</a>
@@ -47,17 +44,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title text-center text-primary" id="myModalLabel">LOGIN</h4>
             </div>
-           <form >
+            <form>
                 <div class="form-group">
                     <label><span class="glyphicon glyphicon-user"></span>&nbsp;USER</label>
                     <input type="text" class="form-control" id="user" placeholder="Escribe tu nombre" required=""/>
                 </div>
                 <div class="form-group">
                     <label><span class="glyphicon glyphicon-lock"></span>&nbsp;PASSWORD</label>
-                    <input type="password" class="form-control" id="pass" placeholder="Escribe tu contraseña" required=""/>
+                    <input type="password" class="form-control" id="pass" placeholder="Escribe tu contraseña"
+                           required=""/>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-sm" data-dismiss="modal"  onclick="login()">login</button>
+                    <button class="btn btn-primary btn-sm" data-dismiss="modal" onclick="login()">login</button>
                     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
                 </div>
                 <div class="ResFormL" style="width: 100%; text-align: center; margin: 0;"></div>
@@ -68,5 +66,6 @@
 
 
 </body>
+
 </html>
 
