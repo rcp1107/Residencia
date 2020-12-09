@@ -26,7 +26,21 @@ switch($_REQUEST["rutina"]){
         break;
     case 'listCoordinacion':
         $s=$_REQUEST['estado'];
-       // print $Eng->pantallaCoordinacion(s);
+        print $Eng->pantallaCoordinacion ($s);
+        break;
+    case 'Teacher_new':
+        print $Eng->newTeacherGuardado ($_REQUEST);
+        break;
+    case 'Teacher_edit':
+        print $Eng->editTeacherGuardado ($_REQUEST);
+        break;
+    case 'pantallaEditarDocente':
+
+        $s=$_REQUEST['id'];
+        print $Eng->edicionDocente ($s);
+        break;
+    case 'student_new':
+        print $Eng->newAlumno($_REQUEST);
         break;
 
 }

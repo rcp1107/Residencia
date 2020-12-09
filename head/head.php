@@ -24,9 +24,11 @@
         <li class="nav-item">
             <a class="nav-link active" onclick="carrucel()" >Inicio</i></a>
         </li>
-        <a href="#" class="nav-link" data-toggle="modal" data-target=".modal-login">
+        <!--<a href="#" class="nav-link" data-toggle="modal" data-target=".modal-login">
             <i class="fa fa-user"></i>&nbsp;&nbsp;Coordinación
-        </a>
+        </a>-->
+        <a class="nav-link" onclick="pintaCoordinacion()" >Coordinacion</i></a>
+
         </li>
         <a class="nav-link" href="#docentes">Docentes</a>
         </li>

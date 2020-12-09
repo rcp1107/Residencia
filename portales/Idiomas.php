@@ -42,60 +42,28 @@ class Idiomas
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#list1" aria-controls="list1" onclick="listCoordinacion(1)" >Docentes</a>
               </li>
+              
               <li class="nav-item">
                 <a class="nav-link" href="#list2" aria-controls="list2" onclick="listCoordinacion(2)">Alumnos</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#list3" aria-controls="list3" onclick="listCoordinacion(3)>Constancia</a>
+                <a class="nav-link" href="#list3" aria-controls="list3" onclick="listCoordinacion(3)">Constancia</a>
               </li>
                <li class="nav-item">
-                <a class="nav-link" href="#list4" aria-controls="list4" onclick="listCoordinacion(4)>Pendientes</a>
+                <a class="nav-link" href="#list4" aria-controls="list4" onclick="listCoordinacion(4)">Pendientes</a>
               </li>
                <li class="nav-item">
-                <a class="nav-link" href="#list5" aria-controls="list5" onclick="listCoordinacion(5)>Tools</a>
+                <a class="nav-link" href="#list5" aria-controls="list5" onclick="listCoordinacion(5)">Tools</a>
               </li>
                <li class="nav-item">
                 <a class="nav-link" href="#">Carrucel</a>
               </li>
             </ul>
-      </div>
-   
-
-      
-      
+      </div>     
       
       <div class="col-10 tab-content" id="vistaCoordinacion">
-              <div class="tab-pane fade show active" role="tabpanel" id="list1" aria-labelledby="list1">
-              
-                 <h4>Teacher List</h4> 
-              <div align="right" class="py-2"><button class="btn btn-secondary" onclick="newTeacher()">Add teacher</button></div>
-                 <table class="table table-bordered">
-                   <thead>
-                     <th>Teacher</th>
-                     <th>Emai</th>
-                     <th>Groups</th>
-                     <th>Action</th>
-                     
-                   </thead>
-                   <tbody>
-                   
-                   </tbody>
-                 </table>
-                 
-                 
-               </div>
-                 <div id="list2" class="tab-pane fade" role="tabpanel" aria-labelledby="list2">
-                    <h4>Lista de alumnos</h4>              
-                 </div>
-                 <div id="list3" class="tab-pane fade" role="tabpanel" aria-labelledby="list3">
-                    <h4>Constancias</h4>              
-                 </div>
-                 <div id="list4" class="tab-pane fade" role="tabpanel" aria-labelledby="list4">
-                    <h4>Pendientes</h4>              
-                 </div>
-                 <div id="list5" class="tab-pane fade" role="tabpanel" aria-labelledby="list5">
-                    <h4>Tools</h4>              
-                 </div>
+            '.$this->listDocentes().'  
+            
              
       </div>
         
@@ -105,23 +73,304 @@ class Idiomas
      return $html;
     }
     public function pantallaCoordinacion($s){
+
          switch ($s){
          case '1':
-             $query='SELECT * FROM ';
+            $return= $this->listDocentes();
+         break;
+             case '2':
+             $return= $this->listAlumnos();
+         break;
+             case '3':
+                 $return= 'llenar datos para constancia';
+             break;
+             case '4':
+                 $return =$this->pendientes();
+                 break;
+
          }
-        // $verUser = ejecutarSQL::consultar("select * from coordinacion where correo='$nombre' and password='$clave'");
-
-       // $UserC = mysqli_num_rows($verUser);
-        //if ($UserC > 0) {
-         //return 1;
-           // }else{
-             //  return  0;
-            //}
-
-
-       // }
+return $return;
 
     }
+private function listDocentes(){
+        $td='';
+        $modal='';
+      $verDocentes=ejecutarSQL::consultar("select id_docente,nombre,apellido_p,apellido_m,correo from docente");
+      while ($row=mysqli_fetch_array($verDocentes)){
+          $id_docente=$row['id_docente'];
+          $nombre=$row['nombre'];
+          $apellido=$row['apellido_p'].' '.$row['apellido_m'];
+          $correo=$row['correo'];
+          $button='
+           <button type="button" class="btn btn-primary" onclick="editarDocente('.$id_docente.')">
+            <a href="#" class="nav-link" data-toggle="modal" data-target=".editTeacher'.$id_docente.'">
+           <li class="fa fa-edit"></li> </button>
+         
+
+                   <btn id="delete'.$id_docente.'" class="btn-outline-danger"><li class="fa fa-trash"></li></btn>
+                   ';
+                    $td.='
+                      <tr>
+                          <td>'.$nombre.'</td>
+                          <td>'.$apellido.'</td>
+                          <td>'.$correo.'</td>
+                          <td>'.$button.'</td>
+                      </tr>
+               ';
+
+      }
+
+
+    $html='
+            <div class="tab-pane fade show active" role="tabpanel" id="list1" aria-labelledby="list1">
+              <div align="right" class="py-2">
+                     <button type="button" class="btn btn-secondary" >
+            <a href="#" class="nav-link" data-toggle="modal" data-target=".modal-addT">
+            <i class="fa fa-user"></i>Agregar Docente</button></a>
+            </div>
+                 <h4>Teacher List</h4> 
+                     
+                     <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                         
+                     <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Correo</th>
+                        <th>Action</th>
+                     </tr>
+                     </thead>
+                   <tbody>
+                     '.$td.'
+                   </tbody>
+                 </table>        
+               </div>
+               
+               <!-- Button trigger modal -->
+            
+        
+
+            
+            <!-- Modal -->
+          
+            <div class="modal fade modal-addT" id="addTeacher" data-action="new" tabindex="-1" aria-labelledby="addTeacherLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar Docente</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                  </div>
+                              <!-- Modal Body -->
+
+                  <div class="modal-body">
+                    <p class="statusMsg"></p>
+                  <form role="form">
+                    <div class="form-group">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido paterno</label>
+                        <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido materno</label>
+                        <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">correo</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTel">Teléfono</label>
+                        <input type="text" class="fa-newspaper-o" id="inputTel" placeholder="Ingrese teléfono"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPass">Contraseña</label>
+                        <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPass1">Contraseña</label>
+                        <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
+                    </div>
+                </form>
+
+                  </div>
+                  <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary submitBtn" onclick="newTeacher()">Guardar</button>
+            </div>
+                </div>
+              </div>
+            </div>
+           
+           
+               
+               
+            ';
+    return $html.$modal;
+}
+private function listAlumnos(){
+    $td='';
+    $modal='';
+    $verAlum=ejecutarSQL::consultar("select id_alumno,nombre,apellido_p,apellido_m,correo,carrera from alumno");
+    while ($row=mysqli_fetch_array($verAlum)){
+        $id_Alumno=$row['id_alumno'];
+        $nombre=$row['nombre'];
+        $apellido=$row['apellido_p'].' '.$row['apellido_m'];
+        $correo=$row['correo'];
+        $carrera=$row['carrera'];
+        $button='
+           <button type="button" class="btn btn-primary" >
+          <li class="fa fa-edit"></li> </button>
+           <btn id="delete'.$id_Alumno.'" class="btn-outline-danger"><li class="fa fa-trash"></li></btn>
+                   ';
+        $td.='
+                      <tr>
+                          <td>'.$nombre.'</td>
+                          <td>'.$apellido.'</td>
+                          <td>'.$correo.'</td>
+                          <td>'.$carrera.'</td>
+                          <td></td>
+                          <td>'.$button.'</td>
+                      </tr>
+               ';
+
+    }
+
+
+    $html='
+            <div class="tab-pane fade show active" role="tabpanel" id="list2" aria-labelledby="list2">
+              <div align="right" class="py-2">
+                     <button type="button" class="btn btn-secondary" >
+            <a href="#" class="nav-link" data-toggle="modal" data-target=".modal-addS">
+            <i class="fa fa-user"></i>Agregar Alumno</button></a>
+            </div>
+                 <h4>Lista Estudiantes</h4> 
+                     
+                     <table class="table table-bordered">
+                     <thead>
+                         <tr>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Correo</th>
+                        <th>Carrera</th>
+                        <th>Nivel</th>
+                        <th>Action</th>
+                     </tr>
+                     </thead>
+                   <tbody>
+                     '.$td.'
+                   </tbody>
+                 </table>        
+               </div>
+               
+               <!-- Button trigger modal -->
+            
+        
+
+            
+            <!-- Modal -->
+          
+            <div class="modal fade modal-addS" id="addStudent" data-action="new" tabindex="-1" aria-labelledby="addStudentLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Dar de Alata Estudiante</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                  </div>
+                              <!-- Modal Body -->
+
+                  <div class="modal-body">
+                    <p class="statusMsg"></p>
+                  <form role="form">
+                    <div class="form-group">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido paterno</label>
+                        <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido materno</label>
+                        <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">correo</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTel">Teléfono</label>
+                        <input type="text" class="fa-newspaper-o" id="inputTel" placeholder="Ingrese teléfono"/>
+                    </div>
+                       <div class="form-group">
+                        <label for="inputCarrera">Carrera</label>
+                        <input type="text" class="fa-newspaper-o" id="inputCarrera" placeholder="Ingrese carrera"/>
+                    </div>
+                       <div class="form-group">
+                        <label for="inputNivel">Nivel</label>
+                        <input type="text" class="fa-newspaper-o" id="inputNivel" placeholder="Ingrese Nivel"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPass">Contraseña</label>
+                        <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPass1">Contraseña</label>
+                        <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
+                    </div>
+                </form>
+
+                  </div>
+                  <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary submitBtn" data-action="newStudent" onclick="datosAlumnos()" >Guardar</button>
+            </div>
+                </div>
+              </div>
+            </div>
+           
+               
+            ';
+    return $html;
+}
+
+
+
+private function pendientes(){
+    $html='
+                 <div class="tab-pane fade show active" role="tabpanel" id="list1" aria-labelledby="list4">
+              
+                 <h4>Slopes</h4> 
+                     <div align="right" class="py-2"><button class="btn btn-secondary" onclick="newSlope()">Add Slope</button></div>
+                     <table class="table table-bordered">
+                     <thead>
+                        <th>Slopes</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                      </thead>
+                   <tbody>
+                   
+                   </tbody>
+                 </table>        
+               </div>
+            ';
+    return $html;
+}
+
+
+
+
+
 
     public function docentes($request)
     {
@@ -158,10 +407,112 @@ class Idiomas
         if ($UserC > 0) {
          return 1;
             }else{
-               return  0;
+            return 0;
             }
 
 
         }
+    public function newTeacherGuardado($request)
+    {
+        $nombre = $request['nombre'];
+        $apP = $request['apP'];
+        $apM = $request['apM'];
+        $email = $request['email'];
+        $telefono = $request['tel'];
+        $pass = $request['pass'];
+        if(consultasSQL::InsertSQL("docente", "nombre, apellido_p, apellido_m, correo, telefono, password",
+            "'$nombre','$apP','$apM','$email','$telefono', '$pass'")){
+            echo '<img src="assets/img/ok.png" class="center-all-contens"><br>El registro se completo con éxito';
+        }else{
+           echo '<img src="assets/img/error.png" class="center-all-contens"><br>Ha ocurrido un error.<br>Por favor intente nuevamente';
+        }
+
+}
+public function edicionDocente($id){
+         $html='';
+        $edicion=ejecutarSQL::consultar("select * from docente where id_docente=$id",array(),97);
+        while ($row=mysqli_fetch_array($edicion)) {
+            $nombre = $row['nombre'];
+            $apellidop = $row['apellido_p'];
+            $apellidom = $row['apellido_m'];
+            $correo = $row['correo'];
+            $tel = $row['telefono'];
+            $pass = $row['password'];
+
+
+        }
+
+    $modal = '
+              <input id="edicion" type="hidden" value="' . $id . '">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar Docente</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                  </div>
+                              <!-- Modal Body -->
+
+                  <div class="modal-body">
+                    <p class="statusMsg"></p>
+                  <form role="form">
+                    <div class="form-group">
+                        <label for="inputName">Nombre</label>
+                        <input type="text" class="form-control" id="inputName" value="' . $nombre . '" placeholder="Ingrese su nombre"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido paterno</label>
+                        <input type="text" class="form-control" id="inputApP"  value="' . $apellidop . '" placeholder="Ingrese el apellido paterno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputApP">Apellido materno</label>
+                        <input type="text" class="form-control" id="inputApM" value="' . $apellidom . '" placeholder="Ingrese el apellido materno"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">correo</label>
+                        <input type="email" class="form-control" id="inputEmail" value="' . $correo . '" placeholder="Se utilizará como usuario de acceso"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputTel">Teléfono</label>
+                        <input type="text" class="fa-newspaper-o" id="inputTel" value="' . $tel . '" placeholder="Ingrese teléfono"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPass">Contraseña</label>
+                        <input type="text" class="form-control" id="inputPass" value="' . $pass . '" placeholder="Ingrese su contraseña"></input>
+                    </div>
+                   
+                </form>
+
+                  </div>
+                  <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary submitBtn" onclick="actulizarDocente()">Actualizar</button>
+            </div>
+                </div>
+              </div>
+                          
+            ';
+   return $modal;
+}
+    public function newAlumno($request){
+        $nombre = $request['nombre'];
+        $apP = $request['apP'];
+        $apM = $request['apM'];
+        $email = $request['email'];
+        $telefono = $request['tel'];
+        $pass = $request['pass'];
+        $carrera = $request['carrera'];
+        $nivel = $request['nivel'];
+        if(consultasSQL::InsertSQL("alumno", "nombre, apellido_p, apellido_m, correo, telefono, password,carrera",
+            "'$nombre','$apP','$apM','$email','$telefono', '$pass','$carrera'")){
+            echo '<img src="assets/img/ok.png" class="center-all-contens"><br>El registro se completo con éxito';
+        }else{
+            echo '<img src="assets/img/error.png" class="center-all-contens"><br>Ha ocurrido un error.<br>Por favor intente nuevamente';
+        }
+    }
+
 }
 ?>
