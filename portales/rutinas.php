@@ -27,20 +27,19 @@ switch ($_REQUEST["rutina"]) {
         $s = $_REQUEST['estado'];
         print $Eng->pantallaCoordinacion($s);
         break;
-    case 'Teacher_new':
+    case 'datosTeaher':
         print $Eng->newTeacherGuardado($_REQUEST);
         break;
-    case 'Teacher_edit':
-        print $Eng->editTeacherGuardado($_REQUEST);
-        break;
-    case 'pantallaEditarDocente':
+    case 'eliminarDocente':
+        print $Eng->elimarDocente($_REQUEST);
 
+    case 'pantallaEditarDocente':
         $s = $_REQUEST['id'];
-        print $Eng->edicionDocente($s);
+        print $Eng->pantallaEdicionDocente($s);
+
         break;
     case 'student_new':
         print $Eng->newAlumno($_REQUEST);
         break;
-
 }
 ?>

@@ -114,19 +114,18 @@ class Idiomas
     {
         $td = '';
         $modal = '';
-        $verDocentes = ejecutarSQL::consultar("select id_docente,nombre,apellido_p,apellido_m,correo from docente");
+        $verDocentes = ejecutarSQL::consultar("select * from docente where status='1'");
         while ($row = mysqli_fetch_array($verDocentes)) {
             $id_docente = $row['id_docente'];
             $nombre = $row['nombre'];
             $apellido = $row['apellido_p'] . ' ' . $row['apellido_m'];
             $correo = $row['correo'];
             $button = '
-           <button type="button" class="btn btn-primary" onclick="editarDocente(' . $id_docente . ')">
-            <a href="#" class="nav-link" data-toggle="modal" data-target=".editTeacher' . $id_docente . '">
-           <li class="fa fa-edit"></li> </button>
-         
-
-                   <btn id="delete' . $id_docente . '" class="btn-outline-danger"><li class="fa fa-trash"></li></btn>
+            <button onclick="editarDocente('.$id_docente.')" class="btn-warning">
+                <a href="#" data-toggle="modal" data-target=".editDoc"><li class="fa fa-edit"></li></a>
+            </button>
+            <button onclick="alerta('.$id_docente.')" class="btn-outline-danger">
+            <li class="fa fa-trash"></li></button>
                    ';
             $td .= '
                       <tr>
@@ -134,6 +133,7 @@ class Idiomas
                           <td>' . $apellido . '</td>
                           <td>' . $correo . '</td>
                           <td>' . $button . '</td>
+                        
                       </tr>
                ';
 
@@ -170,7 +170,7 @@ class Idiomas
         
 
             
-            <!-- Modal -->
+            <!-- Modal REGISTRAR-->
           
             <div class="modal fade modal-addT" id="addTeacher" data-action="new" tabindex="-1" aria-labelledby="addTeacherLabel" aria-hidden="true">
               <div class="modal-dialog">
@@ -189,31 +189,31 @@ class Idiomas
                   <form role="form">
                     <div class="form-group">
                         <label for="inputName">Nombre</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre"/>
+                        <input type="text" class="form-control" id="inputName_new" placeholder="Ingrese su nombre"/>
                     </div>
                     <div class="form-group">
                         <label for="inputApP">Apellido paterno</label>
-                        <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno"/>
+                        <input type="text" class="form-control" id="inputApP_new" placeholder="Ingrese el apellido paterno"/>
                     </div>
                     <div class="form-group">
                         <label for="inputApP">Apellido materno</label>
-                        <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno"/>
+                        <input type="text" class="form-control" id="inputApM_new" placeholder="Ingrese el apellido materno"/>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">correo</label>
-                        <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso"/>
+                        <input type="email" class="form-control" id="inputEmail_new" placeholder="Se utilizará como usuario de acceso"/>
                     </div>
                     <div class="form-group">
                         <label for="inputTel">Teléfono</label>
-                        <input type="text" class="fa-newspaper-o" id="inputTel" placeholder="Ingrese teléfono"/>
+                        <input type="text" class="fa-newspaper-o" id="inputTel_new" placeholder="Ingrese teléfono"/>
                     </div>
                     <div class="form-group">
                         <label for="inputPass">Contraseña</label>
-                        <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
+                        <input type="password" class="form-control" id="inputPass_new" placeholder="Ingrese su contraseña"></input>
                     </div>
                     <div class="form-group">
                         <label for="inputPass1">Contraseña</label>
-                        <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
+                        <input type="password" class="form-control" id="inputPass1_new" placeholder="Repita su contraseña"></input>
                     </div>
                 </form>
 
@@ -221,11 +221,34 @@ class Idiomas
                   <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary submitBtn" onclick="newTeacher()">Guardar</button>
+                <button id="addTeacher" data-action="new" type="button" class="btn btn-primary" onclick="newTeacher(0)">Guardar</button>
             </div>
                 </div>
               </div>
             </div>
+            
+            
+            <!--MODAL EDICION DOCE-->
+            <div class="modal fade editDoc" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Modal with Dynamic Content</h4>
+            </div>
+            <div class="modal-body" id="datosmodal">
+           
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="addTeacher" type="button" class="btn btn-primary submitBtn" onclick="newTeacher(1)" data-action="edit">Actualizar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+            
            
            
                
@@ -456,90 +479,102 @@ class Idiomas
 
     public function newTeacherGuardado($request)
     {
+        $tipo=$request['tipo'];
         $nombre = $request['nombre'];
         $apP = $request['apP'];
         $apM = $request['apM'];
         $email = $request['email'];
         $telefono = $request['tel'];
         $pass = $request['pass'];
-        if (consultasSQL::InsertSQL("docente", "nombre, apellido_p, apellido_m, correo, telefono, password",
-            "'$nombre','$apP','$apM','$email','$telefono', '$pass'")) {
-            echo '<img src="assets/img/ok.png" class="center-all-contens"><br>El registro se completo con éxito';
-        } else {
-            echo '<img src="assets/img/error.png" class="center-all-contens"><br>Ha ocurrido un error.<br>Por favor intente nuevamente';
+
+        if($tipo=='new') {
+
+
+            if (consultasSQL::InsertSQL("docente", "nombre, apellido_p, apellido_m, correo, telefono, password",
+                "'$nombre','$apP','$apM','$email','$telefono', '$pass'")) {
+                echo "El registro se completo con éxito";
+            } else {
+                echo "Ha ocurrido un error\nPor favor intente nuevamente";
+            }
+        }else{
+            $id=$request['id'];
+            if($tipo=='edit'){
+
+                if(consultasSQL::UpdateSQL("docente",
+                    "nombre='$nombre', apellido_p='$apP', apellido_m='$apM', correo='$email', telefono='$telefono', password='$pass'",
+                    "id_docente='$id'" )){
+                    echo "correcto";
+
+                }
+
+            }
+
         }
 
     }
+    public function elimarDocente($request){
+        $id=$request['id'];
+        $status=$request['status'];
+        if(consultasSQL::UpdateSQL("docente",
+            "status='0'",
+            "id_docente='$id'"));
+        echo "eliminado";
 
-    public function edicionDocente($id)
+    }
+    public function editTeacherGuardado(){
+
+    }
+
+    public function pantallaEdicionDocente($id)
     {
-        $html = '';
-        $edicion = ejecutarSQL::consultar("select * from docente where id_docente=$id", array(), 97);
-        while ($row = mysqli_fetch_array($edicion)) {
+        $verDocentes = ejecutarSQL::consultar("select * from docente where id_docente=$id",array($id),1);
+if($row = mysqli_fetch_array($verDocentes)){
+
             $nombre = $row['nombre'];
-            $apellidop = $row['apellido_p'];
-            $apellidom = $row['apellido_m'];
-            $correo = $row['correo'];
-            $tel = $row['telefono'];
-            $pass = $row['password'];
+            $apellido = $row['apellido_p'];
+            $apellido_m=$row['apellido_m'];
+            $correo=$row['correo'];
+            $telefono=$row['telefono'];
+            $password = $row['password'];
 
 
         }
-
-        $modal = '
-              <input id="edicion" type="hidden" value="' . $id . '">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Registrar Docente</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                    <span aria-hidden="true">×</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                  </div>
-                              <!-- Modal Body -->
-
-                  <div class="modal-body">
+$modal1='
+<div class="modal-body">
+<input id="edicion" type="hidden" value="'.$id.'">
                     <p class="statusMsg"></p>
                   <form role="form">
                     <div class="form-group">
-                        <label for="inputName">Nombre</label>
-                        <input type="text" class="form-control" id="inputName" value="' . $nombre . '" placeholder="Ingrese su nombre"/>
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" id="inputName_edit" value="'.$nombre.'">
                     </div>
                     <div class="form-group">
-                        <label for="inputApP">Apellido paterno</label>
-                        <input type="text" class="form-control" id="inputApP"  value="' . $apellidop . '" placeholder="Ingrese el apellido paterno"/>
+                        <label>Apellido paterno</label>
+                        <input type="text" class="form-control" id="inputApP_edit" value="'.$apellido.'">
                     </div>
                     <div class="form-group">
-                        <label for="inputApP">Apellido materno</label>
-                        <input type="text" class="form-control" id="inputApM" value="' . $apellidom . '" placeholder="Ingrese el apellido materno"/>
+                        <label>Apellido materno</label>
+                        <input type="text" class="form-control" id="inputApM_edit" value="'.$apellido_m.'">
                     </div>
                     <div class="form-group">
-                        <label for="inputEmail">correo</label>
-                        <input type="email" class="form-control" id="inputEmail" value="' . $correo . '" placeholder="Se utilizará como usuario de acceso"/>
+                        <label>correo</label>
+                        <input type="email" class="form-control" id="inputEmail_edit" value="'.$correo.'">
                     </div>
                     <div class="form-group">
-                        <label for="inputTel">Teléfono</label>
-                        <input type="text" class="fa-newspaper-o" id="inputTel" value="' . $tel . '" placeholder="Ingrese teléfono"/>
+                        <label>Teléfono</label>
+                        <input type="text" class="fa-newspaper-o" id="inputTel_edit" value="'.$telefono.'">
                     </div>
                     <div class="form-group">
-                        <label for="inputPass">Contraseña</label>
-                        <input type="text" class="form-control" id="inputPass" value="' . $pass . '" placeholder="Ingrese su contraseña"></input>
+                        <label>Contraseña</label>
+                        <input type="text" class="form-control" id="inputPass_edit" value="'.$password.'">
                     </div>
-                   
+
                 </form>
 
                   </div>
-                  <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary submitBtn" onclick="actulizarDocente()">Actualizar</button>
-            </div>
-                </div>
-              </div>
-                          
-            ';
-        return $modal;
+';
+return $modal1;
+
     }
 
     public function newAlumno($request)
