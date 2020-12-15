@@ -12,10 +12,7 @@ switch ($_REQUEST["rutina"]) {
         $dato = $_REQUEST['estado'];
         print $Eng->coordinacion($dato);
         break;
-    case 'docentes':
-        $dato = $_REQUEST['estado'];
-        print $Eng->docentes($dato);
-        break;
+
     case 'alumnos':
         $dato = $_REQUEST['estado'];
         print $Eng->alumnos($dato);
@@ -43,11 +40,13 @@ switch ($_REQUEST["rutina"]) {
         print $Eng->newAlumno($_REQUEST);
         break;
     case 'filtroNombre':
-        print $Eng->nombre($_REQUEST);
+        $carrera=$_REQUEST['carrera'];
+        print $Eng->nombre($carrera);
         break;
 
     case 'pantallaDocentes':
-        print $Eng->pantallaDocente();
+        $id=$_REQUEST['user'];
+        print $Eng->pantallaDocente($id);
         break;
     case 'listaGrupo':
         print  $Eng->listAlum($_REQUEST);
@@ -58,8 +57,14 @@ switch ($_REQUEST["rutina"]) {
     case 'misNotas':
         print $Eng->misNotas($_REQUEST);
         break;
-    case 'guardaNotas':
+    case 'editNotas':
         print $Eng->guardaNotas($_REQUEST);
+        break;
+    case 'asignaGrupo':
+        print $Eng->asignaGrupo($_REQUEST);
+        break;
+    case 'constacia':
+        print $Eng->constacia($_REQUEST);
         break;
 }
 ?>

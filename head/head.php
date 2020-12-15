@@ -16,8 +16,18 @@
     <link rel="stylesheet" href="./fontawesome/css/all.min.css">
 </head>
 <body>
+<nav class="navbar navbar-light">
+    <img src="./img/logotecnm.png" width="20%">
+
+    <img src="./img/logosep.png" width="20%">
+    <img src="./img/logoyucatan.png" width="20%">
+   <div align="right"> <a href="#" class="table-cell-td " data-toggle="modal" data-target=".modal-login">
+        <i class="fa fa-user"></i>&nbsp;&nbsp;Login
+    </a></div>
+</nav>
+
 <h4>
-    <ul class="nav " id="cabecera">
+    <ul class="nav" style="color: #1b1e21" id="cabecera">
         <li class="nav-item">
             <a class="nav-link active" onclick="carrucel()">Inicio</i></a>
         </li>
@@ -28,9 +38,7 @@
         <li class="nav-item">
             <a class="nav-link" href="#">Quejas/Sugerencias</a>
         </li>
-        <a href="#" class="table-cell-td" data-toggle="modal" data-target=".modal-login">
-            <i class="fa fa-user"></i>&nbsp;&nbsp;Login
-        </a>
+
 
     </ul>
 </h4>

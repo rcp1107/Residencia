@@ -28,7 +28,7 @@ switch ($radio){
         }
         break;
     case 'option1':
-        print 'case'.$radio;
+
         $docente = ejecutarSQL::consultar("select correo,password,id_docente from docente where correo='$nombre' and password='$clave'");
 
         if ($row = $docente->fetch_assoc()) {
@@ -43,7 +43,7 @@ switch ($radio){
         }
         break;
     case 'option2':
-        print 'case'.$radio;
+
         $coor = ejecutarSQL::consultar("select correo,password,id_coordinacion from coordinacion where correo='$nombre' and password='$clave'");
         if ($row = $coor->fetch_assoc()) {
             $id= $row['id_coordinacion'];

@@ -139,32 +139,7 @@ function listCoordinacion(s) {
 }
 
 
-function docentes() {
 
-    var s = "prueba";
-    console.log("estoy en docentes");
-    var params = {
-        rutina: 'docentes',
-        estado: s
-    }
-
-    $.ajax({
-        url: "portales/rutinas.php",
-        data: params,
-        type: "POST",
-        dataType: "text"
-    })
-
-        .done(function (data) {
-            $("#inicio").addClass("hidden");
-
-            console.log(data);
-        })
-        .fail(function (textStatus) {
-            alert("error de ajax");
-        });
-
-}
 function guardarNotas(){
     var calificaciones=Array();
     var tabla=$('#listAlumnos');
@@ -403,6 +378,7 @@ function datosAlumnos() {
     var carrera = $('#inputCarrera').val();
     var nivel = $('#inputNivel').val();
     var pass = $('#inputPass').val();
+    var matricula=$('#inputMatricula').val();
     var params = {
         // izquierda así lo mando
 
@@ -415,7 +391,8 @@ function datosAlumnos() {
         pass: pass,
         id: id,
         carrera: carrera,
-        nivel: nivel
+        nivel: nivel,
+        matricula:matricula
     }
     console.log(params);
 
@@ -479,7 +456,7 @@ function datosAlumnos() {
 function alumnos() {
 
     var s = "prueba";
-    console.log("estoy en Docentes");
+
     var params = {
         rutina: 'alumnos',
         estado: s
@@ -506,15 +483,15 @@ function alumnos() {
 function actulizarDocente() {
 
 }
-function listaNombres(){
-    var carrera=$('#carrera').val();
 
-    var nivel=$('#nivel').val();
+function listaNombres(){
+
+    var carrera=$('#carrera').val();
+console.log('carrera'+carrera);
+
     var params = {
         rutina: 'filtroNombre',
-        carrer:carrera,
-
-        nivel:nivel
+        carrera:carrera
     }
     console.log(params);
 
@@ -535,10 +512,15 @@ function listaNombres(){
         });
 
 }
-function pintaDocentes(){
+
+
+
+
+function pintaDocentes(d){
 
     var params = {
         rutina: 'pantallaDocentes',
+        user:d
 
     }
 
@@ -576,8 +558,8 @@ console.log(params);
     })
 
         .done(function (data) {
-            $("#listA").html(data);
-
+          //  $("#listA").html(data);
+            $("#v-pills-tabContent").html(data);
             console.log(data);
         })
         .fail(function (textStatus) {
@@ -611,6 +593,43 @@ function modificarnotas(){
             alert("error de ajax");
         });
 }
+function editaNota(id){
+    console.log('edita nota');
+    var docente=$('#docente').val();
+    var user=id;
+    var nivel=$('#nivel').val();
+    var p1=$('#p1'+id).val();
+    var p2=$('#p2'+id).val();
+    var p3=$('#p3'+id).val();
+
+    var params = {
+        rutina: 'editNotas',
+        nivel:nivel,
+        id:user,
+        p1:p1,
+        p2:p2,
+        p3:p3,
+        docente:docente
+
+    }
+    console.log(params);
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+            //$("#ventana").html(data);
+            modificarnotas();
+           console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+}
+
 function misNotas(u){
     console.log('entre mis notas');
     //var user=$('#user').val();
@@ -636,4 +655,98 @@ console.log(user);
         .fail(function (textStatus) {
             alert("error de ajax");
         });
+}
+
+function guardarAsignacion(){
+    var grupos=Array();
+    var tabla=$('#tablaGrupos');
+    var id_docente=1;//leer el usuario
+    var nivel=$('#nivel').val();
+    tabla.find('tbody tr').each(function (i,v){
+        console.log(v);
+        var id=$(this).attr('data-id');
+        var id_docente=$('#docente'+id).val();
+
+
+        var grupo= {
+            id: id,
+           docente:id_docente
+        }
+        grupos.push(grupo);
+    });
+    var params={
+        rutina:'asignaGrupo',
+        grupo:JSON.stringify(grupos)
+    }
+    console.log(params);
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text",
+
+    })
+
+        .done(function (data) {
+            console.log(data);
+            if(data==1){
+                listCoordinacion(4);
+            }
+
+
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+
+}
+function generaConstancia(){
+    var carrera=$('#carrera').val();
+    var alumno=$('#alumno').val();
+
+    var params={
+        rutina:'constacia',
+        carrera:carrera,
+        alumno:alumno
+    }
+    console.log(params);
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text",
+
+    })
+
+        .done(function (data) {
+            $('#miConstacia').html(data);
+            console.log(data);
+        //   setTimeout(generaPDF(data),3000);
+
+
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+
+
+
+}
+
+function generaPDF(){
+//var dato=;
+    w=window.open();
+    w.document.write(
+        '<style>'+
+        '.iz{aling:left}'+
+        '.d{align:right}'+
+
+        +'</style>'+
+        $('#miConstancia').html()
+
+    );
+    w.print();
+    w.close();
 }
