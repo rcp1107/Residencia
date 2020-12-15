@@ -2,31 +2,63 @@ function login() {
     console.log();
     var password = $("#pass").val();
     var user = $('#user').val();
+    var radio=$('input:radio[name=optionsRadios]:checked').val();
     console.log("estoy en login");
-    var params = {
-        rutina: 'login',
-        password: password,
-        user: user
+    if (password!="" && user!="" && radio!=""){
+        var params = {
+            rutina: 'login',
+            password: password,
+            user: user,
+            radio:radio
+        }
+        console.log(params);
+        $.ajax({
+            url: "portales/login.php",
+            data: params,
+            type: "POST",
+            dataType: "text"
+        })
+            .done(function (data) {
+                console.log('mi data' + data);
+                if(data!=0) {
+                    if (radio == 'option2') {
+                        // alert("ACCESO CORRECTO'\nSe debe mostrar la vista DOCENTE");
+
+                        pintaCoordinacion(data);
+                        $('#li').html('  <a class="nav-link" onclick="pintaCoordinacion('+data+')">Coordinacion</i></a>');
+
+                    } else {
+                        if (radio == 'option1') {
+                            // alert("ACCESO CORRECTO\nSe debe mostrar la vista COORDINACIÓN");
+                            $('#li').html('<a class="nav-link" onclick="pintaDocentes('+data+')">Docentes</i></a>');
+                            pintaDocentes(data);
+                        } else {
+                            if (radio == 'option0') {
+                                //       alert("AACESO CORRECTO\nSe debe mostrar la vista alumno");
+                               $('#li').html('       <a class="nav-link" href="#alumnos" onclick="misNotas('+data+')">Alumnos</a>');
+                                misNotas(data);
+                               console.log(data);
+                            }
+
+                        }
+                    }
+                }
+                    else {
+                            alert("Usuario o contraseña incorrecta");
+                        }
+
+
+
+            })
+            .fail(function (textStatus) {
+                alert("error de ajax");
+            });
+
+    }else {
+        alert("Llene todos los campos");
+
     }
 
-    console.log(params);
-    $.ajax({
-        url: "portales/rutinas.php",
-        data: params,
-        type: "POST",
-        dataType: "text"
-    })
-        .done(function (data) {
-            console.log('mi data' + data);
-            if (data == 1) {
-                pintaCoordinacion();
-            } else {
-                alert('./img/img_alert/error.png');
-            }
-        })
-        .fail(function (textStatus) {
-            alert("error de ajax");
-        });
 
 
 }
@@ -106,6 +138,7 @@ function listCoordinacion(s) {
         });
 }
 
+
 function docentes() {
 
     var s = "prueba";
@@ -132,6 +165,59 @@ function docentes() {
         });
 
 }
+function guardarNotas(){
+    var calificaciones=Array();
+    var tabla=$('#listAlumnos');
+    var id_docente=1;//leer el usuario
+    var nivel=$('#nivel').val();
+   tabla.find('tbody tr').each(function (i,v){
+      console.log(v);
+      var id=$(this).attr('data-id');
+      var p1=$('#p1'+id).val();
+      var p2=$('#p2'+id).val();
+      var p3=$('#p3'+id).val();
+
+      var calificacion= {
+          id: id,
+          p1:p1,
+          p2:p2,
+          p3:p3,
+      }
+       calificaciones.push(calificacion);
+       console.log(calificaciones);
+   });
+   var params={
+       rutina:'guardaNotas',
+       docente:id_docente,
+       nivel:nivel,
+       calificaciones:JSON.stringify(calificaciones)
+   }
+    console.log(params);
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text",
+
+    })
+
+        .done(function (data) {
+            console.log(data);
+            /*if(data==1){
+                listCoordinacion(1);
+            }*/
+
+
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+    console.log(calificaciones);
+
+
+
+}
 
 
 function newTeacher(s) {
@@ -143,12 +229,14 @@ function newTeacher(s) {
   //  var tipo = $("#addTeacher").data('action');
    console.log(tipo);
     var reg = /^[A-Z0-9._%+-]+@([A-Z0-9-]+.)+[A-Z]{2,4}$/i;
-    var nombre = $('#inputName_'+tipo).val();
-    var apP = $('#inputApP_'+tipo).val();
-    var apM = $('#inputApM_'+tipo).val();
+    var nombre = $('#inputName_'+tipo).val().toUpperCase();
+    var apP = $('#inputApP_'+tipo).val().toUpperCase();
+    var apM = $('#inputApM_'+tipo).val().toUpperCase();
     var tel = $('#inputTel_'+tipo).val();
     var email = $('#inputEmail_'+tipo).val();
     var pass = $('#inputPass_'+tipo).val();
+    var pass1 = $('#inputPass1_'+tipo).val();
+//if (pass==pass1){
     var params = {
         // izquierda así lo mando
 
@@ -163,7 +251,10 @@ function newTeacher(s) {
         id: id
     }
     console.log(params);
-
+    if (pass==pass1){
+        band++;
+        alerta("Las contraseñas no son iguales");
+    }
     if (nombre.trim() == '') {
         alert('Porfavor ingrese nombre.');
         $('#inputName_'+tipo).focus();
@@ -201,14 +292,19 @@ function newTeacher(s) {
             dataType: "text",
             beforeSend: function () {
                 $('.submitBtn').attr("disabled", "disabled");
-                $('.modal-body').css('opacity', '.5');
+                //  $('.modal-body').css('opacity', '.5');
             },
         })
 
             .done(function (data) {
-                $("#ventana").html(data);
-
                 console.log(data);
+                if(data!=1){
+
+                }else{
+                    $('.modal').removeClass('modal-backdrop ');
+                    listCoordinacion(1);
+                }
+
 
             })
             .fail(function (textStatus) {
@@ -217,9 +313,16 @@ function newTeacher(s) {
 
 
     }
+//}else {
+  //  alerta("Las contraseñas no son iguales");
+//}
+
 
 
 }
+
+
+
 function eliminarDocente(s){
 
 
@@ -402,4 +505,135 @@ function alumnos() {
 
 function actulizarDocente() {
 
+}
+function listaNombres(){
+    var carrera=$('#carrera').val();
+
+    var nivel=$('#nivel').val();
+    var params = {
+        rutina: 'filtroNombre',
+        carrer:carrera,
+
+        nivel:nivel
+    }
+    console.log(params);
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+
+            $("#alumno").html(data);
+            console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+
+}
+function pintaDocentes(){
+
+    var params = {
+        rutina: 'pantallaDocentes',
+
+    }
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+            $("#ventana").html(data);
+
+            //console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+
+}
+function listaAlumnos(){
+    var docente=$('#docente').val();
+    var nivel=$('#nivel').val();
+    var params = {
+        rutina: 'listaGrupo',
+        nivel:nivel
+
+    }
+console.log(params);
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+            $("#listA").html(data);
+
+            console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+}
+function modificarnotas(){
+    console.log('entre notas');
+    var docente=$('#docente').val();
+    var nivel=$('#nivel').val();
+    var params = {
+        rutina: 'listaGrupoC',
+        nivel:nivel,
+        docente:docente
+
+    }
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+            $("#v-pills-tabContent").html(data);
+
+            //console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+}
+function misNotas(u){
+    console.log('entre mis notas');
+    //var user=$('#user').val();
+    var user=u;
+    var params = {
+        rutina: 'misNotas',
+        id:user
+
+    }
+console.log(user);
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+            $("#ventana").html(data);
+
+            //console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
 }

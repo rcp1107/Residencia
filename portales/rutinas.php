@@ -1,8 +1,8 @@
 <?php
 include_once "Idiomas.php";
+
+
 $Eng = new Idiomas();
-
-
 switch ($_REQUEST["rutina"]) {
     case 'inicio':
         $dato = $_REQUEST['estado'];
@@ -21,7 +21,8 @@ switch ($_REQUEST["rutina"]) {
         print $Eng->alumnos($dato);
         break;
     case 'login':
-        print $Eng->login($_REQUEST);
+
+        //print $Eng->login($_REQUEST);
         break;
     case 'listCoordinacion':
         $s = $_REQUEST['estado'];
@@ -40,6 +41,25 @@ switch ($_REQUEST["rutina"]) {
         break;
     case 'student_new':
         print $Eng->newAlumno($_REQUEST);
+        break;
+    case 'filtroNombre':
+        print $Eng->nombre($_REQUEST);
+        break;
+
+    case 'pantallaDocentes':
+        print $Eng->pantallaDocente();
+        break;
+    case 'listaGrupo':
+        print  $Eng->listAlum($_REQUEST);
+        break;
+    case 'listaGrupoC':
+        print $Eng->listAlumnC($_REQUEST);
+        break;
+    case 'misNotas':
+        print $Eng->misNotas($_REQUEST);
+        break;
+    case 'guardaNotas':
+        print $Eng->guardaNotas($_REQUEST);
         break;
 }
 ?>

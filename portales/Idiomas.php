@@ -1,6 +1,6 @@
 <?php
 include '../funciones/consulSQL.php';
-
+session_start();
 class Idiomas
 {
     public function inicio()
@@ -87,10 +87,10 @@ class Idiomas
                 $return = $this->listAlumnos();
                 break;
             case '3':
-                $return = 'llenar datos para constancia';
+                $return = $this->vistaConstancias();
                 break;
             case '4':
-                $return = $this->pendientes();
+                $return = $this->Grupos();
                 break;
 
         }
@@ -98,19 +98,24 @@ class Idiomas
 
     }
 
+
     private function nivel()
     {
         $niv = '';
         $nivel = ejecutarSQL::consultar("select * from nivel");
         while ($row = mysqli_fetch_array($nivel)) {
-            $niv .= '<option value=' . $row['id_nivel'] . '>' . $row['nivel'] . '</option>';
+            $niv .= '
+      
+            <option value=' . $row['id_nivel'] . '>' . $row['nivel'] . '</option>';
 
         }
-        return $niv;
+        $nv = '<option value="0">-----</option>';
+        return $nv . $niv;
 
     }
 
     private function listDocentes()
+
     {
         $td = '';
         $modal = '';
@@ -121,10 +126,10 @@ class Idiomas
             $apellido = $row['apellido_p'] . ' ' . $row['apellido_m'];
             $correo = $row['correo'];
             $button = '
-            <button onclick="editarDocente('.$id_docente.')" class="btn-warning">
+            <button onclick="editarDocente(' . $id_docente . ')" class="btn-warning">
                 <a href="#" data-toggle="modal" data-target=".editDoc"><li class="fa fa-edit"></li></a>
             </button>
-            <button onclick="alerta('.$id_docente.')" class="btn-outline-danger">
+            <button onclick="alerta(' . $id_docente . ')" class="btn-outline-danger">
             <li class="fa fa-trash"></li></button>
                    ';
             $td .= '
@@ -143,13 +148,17 @@ class Idiomas
         $html = '
             <div class="tab-pane fade show active" role="tabpanel" id="list1" aria-labelledby="list1">
               <div align="right" class="py-2">
-                     <button type="button" class="btn btn-secondary" >
-            <a href="#" class="nav-link" data-toggle="modal" data-target=".modal-addT">
-            <i class="fa fa-user"></i>Agregar Docente</button></a>
+                     <button type="button" class="btn-outline-success" >
+            <a href="#" class="fa fa-user-graduate" data-toggle="modal" data-target=".modal-addT">Agregar Docente</button></a>
+       
+                            
             </div>
+             <input type="text" class="form-control pull-left" style="width:18%" id="search" placeholder="Buscar...">
+
                  <h4>Teacher List</h4> 
+
                      
-                     <table class="table table-bordered">
+                     <table id="tabladocentes" class="table table-bordered">
                      <thead>
                          <tr>
                          
@@ -164,6 +173,21 @@ class Idiomas
                    </tbody>
                  </table>        
                </div>
+               <script>
+                        // Write on keyup event of keyword input element
+                        $(document).ready(function(){
+                            $("#search").keyup(function(){
+                                _this = this;
+                                // Show only matching TR, hide rest of them
+                                $.each($("#tabladocentes tbody tr"), function() {
+                                    if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+                                        $(this).hide();
+                                    else
+                                        $(this).show();
+                                });
+                            });
+                        });
+                    </script>
                
                <!-- Button trigger modal -->
             
@@ -172,7 +196,7 @@ class Idiomas
             
             <!-- Modal REGISTRAR-->
           
-            <div class="modal fade modal-addT" id="addTeacher" data-action="new" tabindex="-1" aria-labelledby="addTeacherLabel" aria-hidden="true">
+            <div class="modal fade modal-addT" id="addTeacher_new"  tabindex="-1" aria-labelledby="addTeacherLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -207,6 +231,7 @@ class Idiomas
                         <label for="inputTel">Teléfono</label>
                         <input type="text" class="fa-newspaper-o" id="inputTel_new" placeholder="Ingrese teléfono"/>
                     </div>
+                    
                     <div class="form-group">
                         <label for="inputPass">Contraseña</label>
                         <input type="password" class="form-control" id="inputPass_new" placeholder="Ingrese su contraseña"></input>
@@ -221,7 +246,7 @@ class Idiomas
                   <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button id="addTeacher" data-action="new" type="button" class="btn btn-primary" onclick="newTeacher(0)">Guardar</button>
+                <button id="addTeacher_new"  data-dismiss="modal" type="button" class="btn btn-primary" onclick="newTeacher(0)">Guardar</button>
             </div>
                 </div>
               </div>
@@ -229,21 +254,22 @@ class Idiomas
             
             
             <!--MODAL EDICION DOCE-->
-            <div class="modal fade editDoc" id="myModal" role="dialog">
+            <div class="modal fade editDoc" id="addTeacher_edit"  role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h4 class="modal-title">Modal with Dynamic Content</h4>
+              
+                <h4 class="modal-title" align="center">Actualizar datos del Docente</h4>
             </div>
             <div class="modal-body" id="datosmodal">
            
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="addTeacher" type="button" class="btn btn-primary submitBtn" onclick="newTeacher(1)" data-action="edit">Actualizar</button>
-
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button data-dismiss="modal" type="button" id="addTeacher_edit" class="btn btn-primary" onclick="newTeacher(1)">
+                    Actualizar
+                    </button>
             </div>
         </div>
     </div>
@@ -268,6 +294,7 @@ class Idiomas
         return $opcion;
 
     }
+
 
     private function listAlumnos()
     {
@@ -413,12 +440,12 @@ class Idiomas
     }
 
 
-    private function pendientes()
+    private function Grupos()
     {
         $html = '
                  <div class="tab-pane fade show active" role="tabpanel" id="list1" aria-labelledby="list4">
               
-                 <h4>Slopes</h4> 
+                 <h4>Asignar Docente al Grupo</h4> 
                      <div align="right" class="py-2"><button class="btn btn-secondary" onclick="newSlope()">Add Slope</button></div>
                      <table class="table table-bordered">
                      <thead>
@@ -463,15 +490,55 @@ class Idiomas
 
     public function login($request)
     {
+      //  sleep(2);
         $nombre = $request['user'];
         $clave = $request['password'];
-        $verUser = ejecutarSQL::consultar("select * from coordinacion where correo='$nombre' and password='$clave'");
+        $radio = $request['radio'];
+        $id='';
 
-        $UserC = mysqli_num_rows($verUser);
-        if ($UserC > 0) {
-            return 1;
-        } else {
-            return 0;
+        if (!$nombre == "" && !$clave == "") {
+            $docente = ejecutarSQL::consultar("select correo,password,id_docente from docente where correo='$nombre' and password='$clave'");
+            $coor = ejecutarSQL::consultar("select correo,password,id_coordinacion from coordinacion where correo='$nombre' and password='$clave'");
+            $alumno = ejecutarSQL::consultar("select correo,password, id_alumno from alumno where correo='$nombre' and password='$clave'");
+
+            if ($radio == "option0") {
+                $alu = mysqli_num_rows($alumno);
+
+                if ($alu > 0) {
+                     $_SESSION['alumno'] = $nombre;
+                     $_SESSION['pass_alumno'] = $clave;
+                     $_SESSION['id_alumno'] = $id;
+
+                     return  1;
+
+                } else {
+                    return 0;
+                }
+
+            }
+            if ($radio == "option1") {
+                $docen = mysqli_num_rows($docente);
+                if ($docen > 0) {
+                    $_SESSION['docente'] = $nombre;
+                    $_SESSION['pass_docente'] = $clave;
+                    $user='<input id="user" data-id="">';
+                    return 1;
+                } else {
+                    return 0;
+                }
+
+            }
+            if ($radio == "option2") {
+                $coordinacion = mysqli_num_rows($coor);
+                if ($coordinacion > 0) {
+                    $_SESSION['admin'] = $nombre;
+                    $_SESSION['pass_admin'] = $clave;
+                    return 2;
+                } else {
+                   return 0;
+                }
+            }
+
         }
 
 
@@ -479,7 +546,7 @@ class Idiomas
 
     public function newTeacherGuardado($request)
     {
-        $tipo=$request['tipo'];
+        $tipo = $request['tipo'];
         $nombre = $request['nombre'];
         $apP = $request['apP'];
         $apM = $request['apM'];
@@ -487,93 +554,98 @@ class Idiomas
         $telefono = $request['tel'];
         $pass = $request['pass'];
 
-        if($tipo=='new') {
+        if ($tipo == 'new') {
 
 
             if (consultasSQL::InsertSQL("docente", "nombre, apellido_p, apellido_m, correo, telefono, password",
                 "'$nombre','$apP','$apM','$email','$telefono', '$pass'")) {
-                echo "El registro se completo con éxito";
+                $return = 1;
             } else {
                 echo "Ha ocurrido un error\nPor favor intente nuevamente";
+                $return = 0;
             }
-        }else{
-            $id=$request['id'];
-            if($tipo=='edit'){
+        } else {
+            $id = $request['id'];
+            if ($tipo == 'edit') {
 
-                if(consultasSQL::UpdateSQL("docente",
+                if (consultasSQL::UpdateSQL("docente",
                     "nombre='$nombre', apellido_p='$apP', apellido_m='$apM', correo='$email', telefono='$telefono', password='$pass'",
-                    "id_docente='$id'" )){
-                    echo "correcto";
-
+                    "id_docente='$id'")) {
+                    $return = 1;
                 }
 
             }
 
         }
 
+        return $return;
+
     }
-    public function elimarDocente($request){
-        $id=$request['id'];
-        $status=$request['status'];
-        if(consultasSQL::UpdateSQL("docente",
+
+    public function elimarDocente($request)
+    {
+        $id = $request['id'];
+        if (consultasSQL::UpdateSQL("docente",
             "status='0'",
-            "id_docente='$id'"));
+            "id_docente='$id'")) ;
         echo "eliminado";
 
     }
-    public function editTeacherGuardado(){
+
+    public function editTeacherGuardado()
+    {
 
     }
 
     public function pantallaEdicionDocente($id)
     {
-        $verDocentes = ejecutarSQL::consultar("select * from docente where id_docente=$id",array($id),1);
-if($row = mysqli_fetch_array($verDocentes)){
+        $verDocentes = ejecutarSQL::consultar("select * from docente where id_docente=$id", array($id), 1);
+        if ($row = mysqli_fetch_array($verDocentes)) {
 
             $nombre = $row['nombre'];
             $apellido = $row['apellido_p'];
-            $apellido_m=$row['apellido_m'];
-            $correo=$row['correo'];
-            $telefono=$row['telefono'];
+            $apellido_m = $row['apellido_m'];
+            $correo = $row['correo'];
+            $telefono = $row['telefono'];
             $password = $row['password'];
 
 
         }
-$modal1='
+        $modal1 = '
 <div class="modal-body">
-<input id="edicion" type="hidden" value="'.$id.'">
+<input id="edicion" type="hidden" value="' . $id . '">
                     <p class="statusMsg"></p>
                   <form role="form">
                     <div class="form-group">
                         <label>Nombre</label>
-                        <input type="text" class="form-control" id="inputName_edit" value="'.$nombre.'">
+                        <input type="text" class="form-control" id="inputName_edit" value="' . $nombre . '">
                     </div>
                     <div class="form-group">
                         <label>Apellido paterno</label>
-                        <input type="text" class="form-control" id="inputApP_edit" value="'.$apellido.'">
+                        <input type="text" class="form-control" id="inputApP_edit" value="' . $apellido . '">
                     </div>
                     <div class="form-group">
                         <label>Apellido materno</label>
-                        <input type="text" class="form-control" id="inputApM_edit" value="'.$apellido_m.'">
+                        <input type="text" class="form-control" id="inputApM_edit" value="' . $apellido_m . '">
                     </div>
                     <div class="form-group">
                         <label>correo</label>
-                        <input type="email" class="form-control" id="inputEmail_edit" value="'.$correo.'">
+                        <input type="email" class="form-control" id="inputEmail_edit" value="' . $correo . '">
                     </div>
                     <div class="form-group">
                         <label>Teléfono</label>
-                        <input type="text" class="fa-newspaper-o" id="inputTel_edit" value="'.$telefono.'">
+                        <input type="text" class="fa-newspaper-o" id="inputTel_edit" value="' . $telefono . '">
                     </div>
                     <div class="form-group">
                         <label>Contraseña</label>
-                        <input type="text" class="form-control" id="inputPass_edit" value="'.$password.'">
+                        <input type="text" class="form-control" id="inputPass_edit" value="' . $password . '">
                     </div>
 
                 </form>
 
                   </div>
 ';
-return $modal1;
+        return $modal1;
 
     }
 
@@ -587,7 +659,7 @@ return $modal1;
         $pass = $request['pass'];
         $carrera = $request['carrera'];
         $nivel = $request['nivel'];
-        if (consultasSQL::InsertSQL("alumno", "nombre, apellido_p, apellido_m, correo, telefono, password,id_carrera, id_nivel",
+        if (consultasSQL::InsertSQL("alumno", "nombre, apellido_p, apellido_m, correo, telefono, password, id_carrera, id_nivel",
             "'$nombre','$apP','$apM','$email','$telefono', '$pass','$carrera', $nivel")) {
             echo '<img src="assets/img/ok.png" class="center-all-contens"><br>El registro se completo con éxito';
         } else {
@@ -595,6 +667,309 @@ return $modal1;
         }
     }
 
+    private function vistaConstancias()
+    {
+        $html = '
+          <div class="row">
+             <div class="col-3">
+             <label>Carrera</label>
+             <select id="carrera">' . $this->carreras() . '</select>
+            
+             </div>
+            
+             <div class="col-3">
+             <label>Nivel</label>
+               <select id="nivel">' . $this->nivel() . '</select>
+              </div>
+             <div class="col-3">
+              <label>Nombre</label>
+                <select id="alumno"></select>
+             </div>
+           
+          </div>
+          <div class="center-block"><button>Generar Pdf</button></div>
+        <script>
+        $("#nivel").on("change",function ()){
+            listaNombres();
+        }
+</script>
+        ';
+
+        return $html;
+    }
+
+    public function nombre($request)
+    {
+        $nivel = $request['nivel'];
+        $carrera = $request['carrera'];
+        $opcion = '';
+        $ver = ejecutarSQL::consultar("select * from vista_alumnos where carrera=" . $carrera . " and nivel=" . $nivel . " ");
+        while ($row = mysqli_fetch_array($ver)) {
+            $nombre = $row['nombre'];
+            $apellido = $row['apellidos'];
+            $id = $row['id_alumno'];
+            $opcion .= '
+            <option value="' . $id . '">' . $nombre . ' ' . $apellido . '</option>
+               ';
+
+
+        }
+        return $opcion;
+
+
+    }
+
+    public function pantallaDocente()
+    {
+        $html = '
+   <input id="docente" value="1" hidden>
+  <div class="d-flex align-items-start">
+  <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true" onclick="listaAlumnos()">Lista Alumnos</a>
+    <a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false" onclick="modificarnotas()">Modificar Notas</a>
+
+  </div>
+    <div class="row">
+         <div class="col-12">
+           <label>GRUPO</label>
+           <select id="nivel">' . $this->nivel() . '</select>
+         </div>
+         <script>
+            $("#nivel").on("change",function (){
+               console.log("entre onchenge");
+                listaAlumnos();
+            })
+         </script>
+        
+      <div class="col-11">
+  
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                   
+                    <div class="col-12">
+                     <h4>Alumnos del grupo</h4>
+                     <div id="listA"></div>
+                    </div>
+                 
+                 </div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+             </div>
+             </div>
+   </div>
+</div>
+       
+        ';
+        return $html;
+
+
+    }
+
+    public function listAlum($request)
+    {
+        $nivel = $request['nivel'];
+
+        $td = '';
+        $modal = '';
+        $verAlum = ejecutarSQL::consultar("select * from vista_alumnos WHERE id_nivel='$nivel'");
+//falta añadir el docente
+        while ($row = mysqli_fetch_array($verAlum)) {
+            $id_Alumno = $row['id_alumno'];
+            $nombre = $row['nombre'];
+            $apellido = $row['apellidos'];
+            $carrera = $row['carrera'];
+
+            $td .= '
+                      <tr id="id' . $id_Alumno . '">
+                          <td>' . $nombre . '' . $apellido . '</td>
+                 
+                          <td>' . $carrera . '</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                      </tr>
+               ';
+
+        }
+
+
+        $html = '
+           <table id="listAlumnos" class="table table-bordered">
+            <thead>
+           <th >NOMBRE</th>
+           <th >CARRERA</th>
+           <th >P1</th>
+           <th >P2</th>
+           <th >P3</th>
+           <th >PROMEDIO</th>
+          </thead>
+          <tbody>
+             ' . $td . '
+          </tbody>
+      </table>
+        
+        
+        ';
+
+        print "prueba";
+        return $html;
+    }
+
+    public function listAlumnC($request)
+    {
+        $nivel = $request['nivel'];
+        $docente = $request['docente'];
+
+        $td = '';
+        $modal = '';
+        $verAlum = ejecutarSQL::consultar("select * from vista_alumnos WHERE id_nivel=$nivel");
+//falta añadir el docente
+        while ($row = mysqli_fetch_array($verAlum)) {
+            $id_Alumno = $row['id_alumno'];
+            $nombre = $row['nombre'];
+            $apellido = $row['apellidos'];
+            $carrera = $row['carrera'];
+
+            $td .= '
+                      <tr id="id' . $id_Alumno . '" data-id="' . $id_Alumno . '">
+                          <td>' . $nombre . '' . $apellido . '</td>
+                 
+                          <td>' . $carrera . '</td>
+                          <td><input class="form-control" id="p1' . $id_Alumno . '"></td>
+                          <td><input class="form-control" id="p2' . $id_Alumno . '"></td>
+                          <td><input class="form-control" id="p3' . $id_Alumno . '"></td>
+                        
+                      </tr>
+               ';
+
+
+        }
+
+
+        $html = '
+           <table id="listAlumnos" class="table table-bordered">
+            <tr>
+           <th >NOMBRE</th>
+           <th >CARRERA</th>
+           <th >P1</th>
+           <th >P2</th>
+           <th >P3</th>
+         
+          </tr>
+          <tbody>
+             ' . $td . '
+          </tbody>
+      </table>
+      
+      <button onclick="guardarNotas()">Guardar</button>
+        
+        
+        ';
+
+
+        return $html;
+
+    }
+
+    public function misNotas($request)
+    {
+        $id = $request['id'];
+
+        $td = '';
+        $modal = '';
+        $verAlum = ejecutarSQL::consultar("select * from vista_alumnos WHERE id_alumno=$id");
+//falta añadir el docente
+        while ($row = mysqli_fetch_array($verAlum)) {
+            $id_Alumno = $row['id_alumno'];
+            $nombre = $row['nombre'];
+            $apellido = $row['apellidos'];
+            $carrera = $row['carrera'];
+            $alumno = $nombre . ' ' . $apellido;
+            $td .= '
+                      <tr id="id' . $id_Alumno . '">
+                          <td></td>                       
+                          <td></td>                       
+                          <td></td>                       
+                          <td></td>                       
+                          <td></td>                       
+                      </tr>
+               ';
+
+        }
+
+
+        $html = '
+         <div class="row">
+          <input type="hidden"  name="admin-name" value="'.$_SESSION['id_alumno'].'>">
+          <div class="col-1">  <labe>Nombre:</labe>  </div>
+          <div class="col-4">  <input class="form-control" value="' . $alumno . '" disabled> </div>
+          <div class="col-1">  <labe>Carrera:</labe>   </div>
+          <div class="col-4"> <input class="form-control" value="' . $carrera . '" disabled> </div>
+                
+         
+          </div>
+          
+           <table id="misNotas" class="table table-bordered">
+            <tr>
+           <th >Nivel</th>
+           
+           <th >P1</th>
+           <th >P2</th>
+           <th >P3</th>
+           <th >FINAL</th>
+         
+          </tr>
+          <tbody>
+             ' . $td . '
+          </tbody>
+      </table>
+      ';
+
+       return $html;
+    }
+
+
+        public function guardaNotas($request){
+        $notas=json_decode($request['calificaciones']);
+        $docente=$request['docente'];
+        $nivel=$request['nivel'];
+
+        foreach ($notas as $key =>$n){
+            $id_alumno=$n->id;
+            $p1=$n->p1;
+            $p2=$n->p2;
+            $p3=$n->p3;
+
+            $not = ejecutarSQL::consultar("select * from parciales where id_alumno='$id_alumno'");
+             $s = mysqli_num_rows($not);
+                if ($s > 0) {
+                    $dato=1;
+                }
+                if($dato){
+                    if (consultasSQL::UpdateSQL("parciales",
+                        "parcial_1='$p1', parcial_2='$p2', parcial_3='$p3'",
+                        "id_alumno='$id_alumno'")) {
+                        $return = 1;
+                    }
+                }else{
+                    if (consultasSQL::InsertSQL("parciales", " parcial_1,parcial_2,parcial_3,id_alumno,id_nivel,id_docente",
+
+                        "'$id_alumno','$p1','$p2','$p3','$id_alumno', '$nivel','$docente'")) {
+                        echo '<img src="assets/img/ok.png" class="center-all-contens"><br>El registro se completo con éxito';
+                    } else {
+                        echo '<img src="assets/img/error.png" class="center-all-contens"><br>Ha ocurrido un error.<br>Por favor intente nuevamente';
+                    }
+
+                }
+
+
+
+        }
+
+
+
+
+        }
 }
 
 ?>

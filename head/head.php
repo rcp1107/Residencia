@@ -17,23 +17,20 @@
 </head>
 <body>
 <h4>
-    <ul class="nav ">
+    <ul class="nav " id="cabecera">
         <li class="nav-item">
             <a class="nav-link active" onclick="carrucel()">Inicio</i></a>
         </li>
         <!--<a href="#" class="nav-link" data-toggle="modal" data-target=".modal-login">
             <i class="fa fa-user"></i>&nbsp;&nbsp;Coordinación
         </a>-->
-        <a class="nav-link" onclick="pintaCoordinacion()">Coordinacion</i></a>
-
-        </li>
-        <a class="nav-link" href="#docentes">Docentes</a>
-        </li>
-        <a class="nav-link" href="#alumnos">Alumnos</a>
-        </li>
+        <li id="li"></li>
         <li class="nav-item">
             <a class="nav-link" href="#">Quejas/Sugerencias</a>
         </li>
+        <a href="#" class="table-cell-td" data-toggle="modal" data-target=".modal-login">
+            <i class="fa fa-user"></i>&nbsp;&nbsp;Login
+        </a>
 
     </ul>
 </h4>
@@ -47,12 +44,31 @@
             <form>
                 <div class="form-group">
                     <label><span class="glyphicon glyphicon-user"></span>&nbsp;USER</label>
-                    <input type="text" class="form-control" id="user" placeholder="Escribe tu nombre" required=""/>
+                    <input type="text" class="form-control" id="user" placeholder="Escribe tu nombre" required="">
                 </div>
                 <div class="form-group">
                     <label><span class="glyphicon glyphicon-lock"></span>&nbsp;PASSWORD</label>
                     <input type="password" class="form-control" id="pass" placeholder="Escribe tu contraseña"
-                           required=""/>
+                           required="">
+                </div>
+                <p>¿SELECCIONE?</p>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" value="option0">
+                        ALUMNO
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" value="option1">
+                        DOCENTE
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" value="option2">
+                        COORDINACIÓN
+                    </label>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-sm" data-dismiss="modal" onclick="login()">login</button>

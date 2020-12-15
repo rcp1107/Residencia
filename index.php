@@ -1,9 +1,13 @@
 <?php include './head/head.php';
 ?>
 
+
 <!DOCTYPE html>
 <body>
+
+
    <form>
+
       <div id="ventana">
 
          <div class="tab-pane fade show active" id="inicio" role="tabpanel"aria-labelledby="inicio-tab">
