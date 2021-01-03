@@ -303,10 +303,74 @@ function eliminarDocente(s){
 
 
 }
-function alerta(s)
+
+
+function deleteA(s)
 {
+
     var mensaje;
     var opcion = confirm("Clicka en Aceptar o Cancelar");
+    if (opcion == true) {
+        var params = {
+            rutina: 'eliminarAlumno',
+            id: s
+        }
+        console.log(params);
+
+        $.ajax({
+            url: "portales/rutinas.php",
+            data: params,
+            type: "POST",
+            dataType: "text"
+        })
+
+            .done(function (data) {
+
+                $("#datosmodal").html(data);
+                console.log(data);
+            })
+            .fail(function (textStatus) {
+                alert("error de ajax");
+            });
+
+    } else {
+        console.log("No se eliminó");
+    }
+}
+
+
+function editarAlumno(s) {
+
+    var params = {
+        rutina: 'pantallaEditarAlumno',
+        id: s
+    }
+    console.log(params);
+
+    $.ajax({
+        url: "portales/rutinas.php",
+        data: params,
+        type: "POST",
+        dataType: "text"
+    })
+
+        .done(function (data) {
+
+            $("#datosmodal").html(data);
+            console.log(data);
+        })
+        .fail(function (textStatus) {
+            alert("error de ajax");
+        });
+
+}
+
+
+function alerta(s)
+{
+
+    var mensaje;
+    var opcion = confirm("Click en Aceptar o Cancelar");
     if (opcion == true) {
         var params = {
             rutina: 'eliminarDocente',

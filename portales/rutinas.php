@@ -17,6 +17,13 @@ switch ($_REQUEST["rutina"]) {
         $dato = $_REQUEST['estado'];
         print $Eng->alumnos($dato);
         break;
+    case 'eliminarAlumno':
+        print $Eng->eliminarAlumno($_REQUEST);
+        break;
+
+    case 'pantallaEditarAlumno':
+        print $Eng->editarAlumno($_REQUEST);
+        break;
     case 'login':
 
         //print $Eng->login($_REQUEST);
@@ -30,7 +37,7 @@ switch ($_REQUEST["rutina"]) {
         break;
     case 'eliminarDocente':
         print $Eng->elimarDocente($_REQUEST);
-
+        break;
     case 'pantallaEditarDocente':
         $s = $_REQUEST['id'];
         print $Eng->pantallaEdicionDocente($s);

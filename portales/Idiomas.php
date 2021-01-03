@@ -327,13 +327,16 @@ class Idiomas
             $nivee = $row['nivel'];
 
             $button = '
-           <button id="edit" class="btn-outline-warning" >
+           <button id="edit" class="btn-outline-warning" onclick="editarAlumno(' . $id_Alumno . ')">
           <li class="fa fa-edit">        
             </li> 
             </button>
-           <btn id="delete' . $id_Alumno . '" class="btn-outline-danger">
+           <btn id="delete' . $id_Alumno . '" class="btn-outline-danger" data-action="alumno" onclick="deleteA(' . $id_Alumno . ')">
            <li class="fa fa-trash"></li></btn>
                    ';
+
+
+
             $td .= '
                       <tr>
                           <td>' . $nombre . '</td>
@@ -393,62 +396,62 @@ class Idiomas
                   </div>
                               <!-- Modal Body -->
 
-                  <div class="modal-body">
-                    <p class="statusMsg"></p>
-                  <form role="form">
-                    <div class="form-group">
-                        <label for="inputName">Nombre</label>
-                        <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputApP">Apellido paterno</label>
-                        <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputApP">Apellido materno</label>
-                        <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Matricula</label>
-                        <input type="email" class="form-control" id="inputMatricula" placeholder="Ingrese Matriculas"/>
-                    </div>
-                    <div class="form-group">
-                         <label for="inputEmail">correo</label>
-                        <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso"/>
+                <div class="modal-body" id="body">
                    
-                        <label for="inputTel">Teléfono</label>
-                        <input type="text" class="form-control" id="inputTel" placeholder="Ingrese teléfono"/>
-                    </div>
-                       <div class="form-group">
-                        <label for="inputCarrera">Carrera</label>
-                        <select type="text" class="form-control" id="inputCarrera" placeholder="Seleccione carrera">
-                        <option>Seleccione carrera</option>
-                        ' . $this->carreras() . '</select>
-                    </div>
-                       <div class="form-group">
-                        <label for="inputNivel">Nivel</label>
-                        <select type="text" class="form-control" id="inputNivel" placeholder="Seleccione Nivel">
-                                               <option>Seleccione nivel</option>
-                                                                       ' . $this->nivel1() . '</select>
-
-
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPass">Contraseña</label>
-                        <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPass1">Contraseña</label>
-                        <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
-                    </div>
-                </form>
+                          <form role="form">
+                            <div class="form-group">
+                                <label for="inputName">Nombre</label>
+                                <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputApP">Apellido paterno</label>
+                                <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputApP">Apellido materno</label>
+                                <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail">Matricula</label>
+                                <input type="email" class="form-control" id="inputMatricula" placeholder="Ingrese Matriculas"/>
+                            </div>
+                            <div class="form-group">
+                                 <label for="inputEmail">correo</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso"/>
+                           
+                                <label for="inputTel">Teléfono</label>
+                                <input type="text" class="form-control" id="inputTel" placeholder="Ingrese teléfono"/>
+                            </div>
+                               <div class="form-group">
+                                <label for="inputCarrera">Carrera</label>
+                                <select type="text" class="form-control" id="inputCarrera" placeholder="Seleccione carrera">
+                                <option>Seleccione carrera</option>
+                                ' . $this->carreras() . '</select>
+                            </div>
+                               <div class="form-group">
+                                <label for="inputNivel">Nivel</label>
+                                <select type="text" class="form-control" id="inputNivel" placeholder="Seleccione Nivel">
+                                                       <option>Seleccione nivel</option>
+                                                                               ' . $this->nivel1() . '</select>
+        
+        
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPass">Contraseña</label>
+                                <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPass1">Contraseña</label>
+                                <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
+                            </div>
+                        </form>
 
                   </div>
                   <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary submitBtn" data-action="newStudent" onclick="datosAlumnos()" >Guardar</button>
-            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary submitBtn" data-action="newStudent" onclick="datosAlumnos()" >Guardar</button>
+                    </div>
                 </div>
               </div>
             </div>
@@ -613,6 +616,92 @@ class Idiomas
         }
 
         return $return;
+
+    }
+    public function eliminarAlumno($request)
+    {
+        $id = $request['id'];
+        if (consultasSQL::UpdateSQL("alumno",
+            "status='0'",
+            "id_alumno='$id'")) ;
+        echo "eliminado";
+
+    }
+    public function editarAlumno($id)
+    {
+        $ver = ejecutarSQL::consultar("select * from alumno where id_alumno=$id", array($id), 1);
+        if ($row = mysqli_fetch_array($ver)) {
+            $matricula=$row['matriula'];
+            $nombre = $row['nombre'];
+            $apellido = $row['apellido_p'];
+            $apellido_m = $row['apellido_m'];
+            $correo = $row['correo'];
+            $telefono = $row['telefono'];
+            $password = $row['password'];
+
+
+
+        }
+        $modal1 = '
+<div class="modal-body">
+    <form role="form">
+                            <div class="form-group">
+                                <label for="inputName">Nombre</label>
+                                <input type="text" class="form-control" id="inputName" placeholder="Ingrese su nombre" value="'.$nombre.'"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputApP">Apellido paterno</label>
+                                <input type="text" class="form-control" id="inputApP" placeholder="Ingrese el apellido paterno" value="'.$apellido.'"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputApP">Apellido materno</label>
+                                <input type="text" class="form-control" id="inputApM" placeholder="Ingrese el apellido materno" value="'.$apellido_m.'"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail">Matricula</label>
+                                <input type="email" class="form-control" id="inputMatricula" placeholder="Ingrese Matriculas" value="'.$matricula.'"/>
+                            </div>
+                            <div class="form-group">
+                                 <label for="inputEmail">correo</label>
+                                <input type="email" class="form-control" id="inputEmail" placeholder="Se utilizará como usuario de acceso" value="'.$correo.'"/>
+                           
+                                <label for="inputTel">Teléfono</label>
+                                <input type="text" class="form-control" id="inputTel" placeholder="Ingrese teléfono" value="'.$telefono.'"/>
+                            </div>
+                               <div class="form-group">
+                                <label for="inputCarrera">Carrera</label>
+                                <select type="text" class="form-control" id="inputCarrera" placeholder="Seleccione carrera">
+                                <option>Seleccione carrera</option>
+                                ' . $this->carreras() . '</select>
+                            </div>
+                               <div class="form-group">
+                                <label for="inputNivel">Nivel</label>
+                                <select type="text" class="form-control" id="inputNivel" placeholder="Seleccione Nivel">
+                                                       <option>Seleccione nivel</option>
+                                                                               ' . $this->nivel1() . '</select>
+        
+        
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPass">Contraseña</label>
+                                <input type="password" class="form-control" id="inputPass" placeholder="Ingrese su contraseña"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPass1">Contraseña</label>
+                                <input type="password" class="form-control" id="inputPass1" placeholder="Repita su contraseña"></input>
+                            </div>
+                        </form>
+
+                  </div>
+                  <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary submitBtn" data-action="newStudent" onclick="datosAlumnos()" >Guardar</button>
+                    </div>
+
+                  </div>
+';
+        return $modal1;
 
     }
 
